@@ -1,0 +1,21 @@
+@let _step = step();
+@let _classNames = classNames();
+@let _form = form();
+
+@if (_step !== null && _form !== null) {
+  <div [ngClass]="_classNames?.container">
+    @if (_step.config?.title) {
+      <h2 [ngClass]="_classNames?.title">{{ _step.config?.title }}</h2>
+    }
+
+    <form [formGroup]="_form" [ngClass]="_classNames?.form" (ngSubmit)="onSubmit()">
+      <div [ngClass]="_classNames?.inputContainer">
+        @for (input of _step.inputs; track input.returnKey) {
+          <app-input [key]="input.returnKey" />
+        }
+      </div>
+
+      <app-button />
+    </form>
+  </div>
+}

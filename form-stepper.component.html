@@ -1,0 +1,14 @@
+@let _formStepper = formStepper();
+@let classNames = _formStepper.config.classNames;
+
+<div [ngClass]="classNames?.container">
+  @if (_formStepper.config.title) {
+    <h1 [ngClass]="classNames?.title">{{ _formStepper.config.title }}</h1>
+  }
+
+  <app-redirect [key]="'actionText'" />
+
+  <app-step />
+
+  <app-redirect [key]="'footerText'" />
+</div>

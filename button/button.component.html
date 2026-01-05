@@ -1,0 +1,76 @@
+@let _view = view();
+@let _form = form();
+@let _stepPosition = stepPosition();
+
+@if (_view !== null && _form !== null && _view.kind === 'single') {
+  <div [ngClass]="_view.classNames?.container">
+    <button
+      [ngClass]="[
+        _view.classNames?.button,
+        _form.invalid ? (_view.classNames?.disabled ?? '') : '',
+      ]"
+      type="submit"
+    >
+      {{ _view.text }}
+    </button>
+  </div>
+}
+
+@if (_view !== null && _form !== null && _view.kind === 'multi' && _stepPosition === 'first') {
+  <div [ngClass]="_view.classNames?.container">
+    <button
+      [ngClass]="[
+        _view.classNames?.first,
+        _view.classNames?.button,
+        _form.invalid ? (_view.classNames?.disabled ?? '') : '',
+      ]"
+      type="submit"
+    >
+      {{ _view.text?.next }}
+    </button>
+  </div>
+}
+
+@if (_view !== null && _form !== null && _view.kind === 'multi' && _stepPosition === 'middle') {
+  <div [ngClass]="_view.classNames?.container">
+    <button
+      (click)="previous()"
+      [ngClass]="[_view.classNames?.previous, _view.classNames?.button]"
+      type="button"
+    >
+      {{ _view.text?.previous }}
+    </button>
+    <button
+      [ngClass]="[
+        _view.classNames?.next,
+        _view.classNames?.button,
+        _form.invalid ? (_view.classNames?.disabled ?? '') : '',
+      ]"
+      type="submit"
+    >
+      {{ _view.text?.next }}
+    </button>
+  </div>
+}
+
+@if (_view !== null && _form !== null && _view.kind === 'multi' && _stepPosition === 'last') {
+  <div [ngClass]="_view.classNames?.container">
+    <button
+      (click)="previous()"
+      [ngClass]="[_view.classNames?.previous, _view.classNames?.button]"
+      type="button"
+    >
+      {{ _view.text?.previous }}
+    </button>
+    <button
+      [ngClass]="[
+        _view.classNames?.final,
+        _view.classNames?.button,
+        _form.invalid ? (_view.classNames?.disabled ?? '') : '',
+      ]"
+      type="submit"
+    >
+      {{ _view.text?.final }}
+    </button>
+  </div>
+}

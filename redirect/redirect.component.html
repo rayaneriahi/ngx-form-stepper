@@ -1,0 +1,16 @@
+@let _classNames = classNames();
+@let _redirectItems = redirectItems();
+
+<p [ngClass]="_classNames?.container">
+  @for (item of _redirectItems; track item) {
+    @if (isUrl(item)) {
+      <a [ngClass]="_classNames?.url" [routerLink]="item.url">
+        {{ item.urlText }}
+      </a>
+    }
+
+    @if (isText(item)) {
+      <span [ngClass]="_classNames?.text">{{ item }}</span>
+    }
+  }
+</p>
