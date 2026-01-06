@@ -1,23 +1,21 @@
 # ngx-form-stepper
 
-[🇫🇷 Lire la version française](README.fr.md)
+**ngx-form-stepper** est une librairie Angular pour créer des formulaires à étapes avec validations par champ, **extrêmement typée**.
 
-**ngx-form-stepper** is an Angular library to create multi-step forms with field-level validations, **extremely typed**.
+Elle empêche la création d’états invalides **au moment du développement**, pas à l’exécution.
 
-It prevents creating invalid states **at development time**, not at runtime.
+Destinée aux développeurs Angular qui veulent des formulaires robustes, typés et maintenables sans configuration complexe.
 
-Intended for Angular developers who want robust, typed, and maintainable forms without complex configuration.
+## Pourquoi ?
 
-## Why ?
+- Formulaires multi-étapes simples à déclarer
+- Validation par champ rapide à mettre en place
+- Impossible d’associer un mauvais `validator` à un `Input`
+- Valeurs toujours cohérentes avec leur type
+- Clés de retour uniques obligatoires
+- **Aucun `as const` requis**
 
-- Simple multi-step forms declaration
-- Quick per-field validation setup
-- Impossible to associate a wrong `validator` to an `Input`
-- Values always consistent with their type
-- Unique return keys required
-- **No `as const` needed**
-
-## Quick example
+## Exemple rapide
 
 ```typescript
 step1 = new Step([
@@ -52,25 +50,25 @@ onComplete() {
 
 ## Input
 
-Each `Input` type only accepts compatible `validators`.
+Chaque type d’`Input` accepte uniquement les `validators` compatibles.
 
-Examples :
+Exemples :
 
-- `email` ❌ forbidden on `number`
-- `minLength` ❌ forbidden on `checkbox`
-- `confirm` ❌ forbidden on `select`
+- `email` ❌ interdit sur `number`
+- `minLength` ❌ interdit sur `checkbox`
+- `confirm` ❌ interdit sur `select`
 
-And only default values that are compatible.
+Et uniquement les valeurs par défaut compatibles.
 
-Examples :
+Exemples :
 
-- `string` ❌ forbidden on `number`
-- `number` ❌ forbidden on `checkbox`
-- `string | number` ❌ forbidden on `select`
+- `string` ❌ interdit sur `number`
+- `number` ❌ interdit sur `checkbox`
+- `string | number` ❌ interdit sur `select`
 
-Return key must be camelCase.
+Clé de retour au format camelCase.
 
-Duplicating a `validator` is impossible.
+Impossible de dupliquer un `validator`.
 
 ```typescript
 export class Input<
@@ -112,7 +110,7 @@ export enum InputType {
 
 ## Validator
 
-A `validator` is a function that can be passed to an `Input`. It takes different arguments like conditional values or error text.
+Un `validator` est une fonction qu’on peut passer à un `Input`. Elle prend différents arguments comme la valeur conditionnelle ou le texte de l’erreur.
 
 ```typescript
 export function minLength(
@@ -157,9 +155,9 @@ export type ValidatorsNames =
 
 ## Select
 
-Tuple of one or more `SelectItem`.
+Tuple d'un ou plusieurs `SelectItem`.
 
-`currentIndex` must be a valid index of the tuple or null.
+Le `currentIndex` doit obligatoirement être un index valide du tuple ou null.
 
 ```typescript
 select = new Input(
@@ -194,9 +192,9 @@ export type SelectItem = {
 
 ## Step
 
-Impossible to duplicate an `Input` return key.
+Impossible de dupliquer la clé de retour d’un `Input`.
 
-Tuple of one or more `Inputs`.
+Tuple d’un ou plusieurs `Inputs`.
 
 ```typescript
 export class Step<T extends InputTuple> {
@@ -213,11 +211,11 @@ export type StepConfig = Readonly<{
 
 ## FormStepper
 
-Impossible to duplicate an `Input` return key between two `Steps`.
+Impossible de dupliquer la clé de retour d’un `Input` entre deux `Steps`.
 
-Configuration object depending on the number of `Steps`.
+Objet de configuration qui dépend du nombre de `Steps`.
 
-Tuple of one or more `Steps`.
+Tuple d’une ou plusieurs `Steps`.
 
 ```typescript
 export class FormStepper<T extends StepTuple> {
@@ -256,7 +254,7 @@ export type MultiStepConfig = Readonly<{
 
 ## RedirectItem[]
 
-A `RedirectItem[]` is an array of strings or `RedirectUrl` objects, a kind of mini TS language to create texts with clickable links.
+Un `RedirectItem[]` est un tableau de string ou d’objet `RedirectUrl`, une sorte de mini langage TS permettant de créer des textes avec lien cliquable.
 
 ```typescript
 actionText = [
@@ -273,7 +271,7 @@ export type RedirectItem = RedirectText | RedirectUrl;
 
 ## ButtonText
 
-`buttonText` property of `FormStepper` depends on the number of `Steps`.
+La propriété `buttonText` du `FormStepper` dépend du nombre de `Steps`.
 
 ```typescript
 export type SingleStepButtonText = string;
@@ -287,7 +285,7 @@ export type MultiStepButtonText = Readonly<{
 
 ## ClassNames
 
-`classNames` property of `FormStepper` also depends on the number of `Steps`.
+La propriété `classNames` du `FormStepper` dépend également du nombre de `Steps`.
 
 ```typescript
 export type SingleStepClassNames = DeepPartial<{

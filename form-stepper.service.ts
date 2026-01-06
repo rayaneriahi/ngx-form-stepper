@@ -1,14 +1,16 @@
-import { Injectable, signal } from '@angular/core';
-import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
-import { FormStepper } from './form-stepper.utils';
-import { MultiStepTuple, StepTuple } from './step/step.types';
-import { InputType } from './input/input.types';
-import { Select } from './input/select/select.utils';
-import { SelectItemTuple } from './input/select/select.types';
+import { Injectable, signal } from "@angular/core";
+import { FormControl, FormGroup, ValidatorFn } from "@angular/forms";
+import { FormStepper } from "./form-stepper.utils";
+import { MultiStepTuple, StepTuple } from "./step/step.types";
+import { InputType } from "./input/input.types";
+import { Select } from "./input/select/select.utils";
+import { SelectItemTuple } from "./input/select/select.types";
 
 @Injectable()
 export class FormStepperService {
-  readonly formStepper = signal<FormStepper<StepTuple | MultiStepTuple> | null>(null);
+  readonly formStepper = signal<FormStepper<StepTuple | MultiStepTuple> | null>(
+    null
+  );
   stepsForm = signal<Record<string, FormGroup> | null>(null);
   index = signal(0);
   completed = signal<boolean>(false);
@@ -20,8 +22,8 @@ export class FormStepperService {
 
   private dateToInputFormat(date: Date): `${number}-${string}-${string}` {
     const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 0-indexé
-    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
 
     return `${year}-${month}-${day}`;
   }
@@ -33,7 +35,9 @@ export class FormStepperService {
     const forms = Object.fromEntries(
       steps.map((step, index) => {
         const validators = step.inputs.flatMap((i) => {
-          const cv = i.validators ? (i.validators.find((v) => v.kind === 'confirm') ?? null) : null;
+          const cv = i.validators
+            ? i.validators.find((v) => v.kind === "confirm") ?? null
+            : null;
 
           if (cv === null) return [];
 
@@ -49,11 +53,11 @@ export class FormStepperService {
             Object.fromEntries(
               step.inputs.flatMap((input) => {
                 const confirm = input.validators
-                  ? (input.validators.find((v) => v.kind === 'confirm') ?? null)
+                  ? input.validators.find((v) => v.kind === "confirm") ?? null
                   : null;
 
                 const other = input.validators
-                  ? input.validators.filter((v) => v.kind !== 'confirm')
+                  ? input.validators.filter((v) => v.kind !== "confirm")
                   : [];
 
                 const validators: ValidatorFn[] = [];
@@ -65,29 +69,43 @@ export class FormStepperService {
                 const defaultValue =
                   input.defaultValue === null
                     ? input.type === InputType.Checkbox
-                      ? 'false'
-                      : ''
+                      ? "false"
+                      : ""
                     : input.type === InputType.Number
-                      ? Number.isNaN(input.defaultValue)
-                        ? ''
-                        : `${input.defaultValue}`
-                      : input.type === InputType.Checkbox
-                        ? `${input.defaultValue}`
-                        : input.type === InputType.Date
-                          ? this.dateToInputFormat(input.defaultValue as Date)
-                          : input.type === InputType.Select
-                            ? (input.defaultValue as Select<SelectItemTuple, number | null>)
-                                .current === null
-                              ? ''
-                              : (input.defaultValue as Select<SelectItemTuple, number | null>)
-                                  .current!.value
-                            : (input.defaultValue as Exclude<
-                                typeof input.defaultValue,
-                                boolean | number | Date | Select<SelectItemTuple, number | null>
-                              >);
+                    ? Number.isNaN(input.defaultValue)
+                      ? ""
+                      : `${input.defaultValue}`
+                    : input.type === InputType.Checkbox
+                    ? `${input.defaultValue}`
+                    : input.type === InputType.Date
+                    ? this.dateToInputFormat(input.defaultValue as Date)
+                    : input.type === InputType.Select
+                    ? (
+                        input.defaultValue as Select<
+                          SelectItemTuple,
+                          number | null
+                        >
+                      ).current === null
+                      ? ""
+                      : (
+                          input.defaultValue as Select<
+                            SelectItemTuple,
+                            number | null
+                          >
+                        ).current!.value
+                    : (input.defaultValue as Exclude<
+                        typeof input.defaultValue,
+                        | boolean
+                        | number
+                        | Date
+                        | Select<SelectItemTuple, number | null>
+                      >);
 
                 const controls = [
-                  [input.returnKey, new FormControl<string>(defaultValue, validators)],
+                  [
+                    input.returnKey,
+                    new FormControl<string>(defaultValue, validators),
+                  ],
                 ];
 
                 if (confirm !== null) {
@@ -98,12 +116,12 @@ export class FormStepperService {
                 }
 
                 return controls;
-              }),
+              })
             ),
-            { validators },
+            { validators }
           ),
         ];
-      }),
+      })
     );
 
     this.stepsForm.update(() => forms);
@@ -125,23 +143,23 @@ export class FormStepperService {
 
       fs.values[key] =
         type === InputType.Checkbox
-          ? value === 'true'
-          : value === ''
+          ? value === "true"
+          : value === ""
+          ? null
+          : type === InputType.Number
+          ? Number.isNaN(Number(value))
             ? null
-            : type === InputType.Number
-              ? Number.isNaN(Number(value))
-                ? null
-                : Number(value)
-              : type === InputType.Tel
-                ? value.replace(/\s|-/g, '')
-                : type === InputType.Date
-                  ? new Date(value)
-                  : value;
+            : Number(value)
+          : type === InputType.Tel
+          ? value.replace(/\s|-/g, "")
+          : type === InputType.Date
+          ? new Date(value)
+          : value;
     });
 
     step.inputs.forEach((input) => {
       const confirm = input.validators
-        ? (input.validators.find((v) => v.kind === 'confirm') ?? null)
+        ? input.validators.find((v) => v.kind === "confirm") ?? null
         : null;
 
       if (confirm !== null) {
