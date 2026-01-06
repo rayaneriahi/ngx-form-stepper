@@ -287,6 +287,40 @@ export type MultiStepButtonText = Readonly<{
 
 ## ClassNames
 
+To add your own styles to a `FormStepper`, I recommend creating a separate style file and adding your classes there. You should then import the created file into the global styles file of your app.
+
+```typescript
+classNames: SingleStepClassNames = {
+  title: "fs-title",
+  input: {
+    error: "fs-input-error",
+  },
+};
+
+form = new FormStepper([this.step], {
+  buttonText: "Submit",
+  classNames: this.classNames,
+});
+```
+
+```css
+/* app/fs.css */
+
+.fs-title {
+  color: blue;
+}
+
+.fs-input-error {
+  color: red;
+}
+```
+
+```css
+/* styles.css */
+
+@import "app/fs.css";
+```
+
 `classNames` property of `FormStepper` also depends on the number of `Steps`.
 
 ```typescript
