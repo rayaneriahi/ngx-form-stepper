@@ -21,6 +21,10 @@ Destinée aux développeurs Angular qui veulent des formulaires robustes, typés
 npm install ngx-form-stepper
 ```
 
+Les retours et suggestions sont les bienvenus.
+
+N’hésitez pas à ouvrir une issue ou une discussion. Tout retour aide à améliorer la librairie.
+
 ## Exemple rapide
 
 ```typescript
