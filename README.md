@@ -17,6 +17,12 @@ Intended for Angular developers who want robust, typed, and maintainable forms w
 - Unique return keys required
 - **No `as const` needed**
 
+## Installation
+
+```bash
+npm install ngx-form-stepper
+```
+
 ## Quick example
 
 ```typescript

@@ -15,6 +15,12 @@ Destinée aux développeurs Angular qui veulent des formulaires robustes, typés
 - Clés de retour uniques obligatoires
 - **Aucun `as const` requis**
 
+## Installation
+
+```bash
+npm install ngx-form-stepper
+```
+
 ## Exemple rapide
 
 ```typescript
