@@ -8,7 +8,7 @@ It prevents creating invalid states **at development time**, not at runtime.
 
 Intended for Angular developers who want robust, typed, and maintainable forms without complex configuration.
 
-## Why ?
+## Why?
 
 - Simple multi-step forms declaration
 - Quick per-field validation setup
