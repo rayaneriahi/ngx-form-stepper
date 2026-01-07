@@ -28,15 +28,15 @@ type _AuthLetter =
 
 type _AuthNumber = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
 
-type IsCamelCase<S extends string> = S extends ''
+export type IsCamelCase<S extends string> = S extends ''
   ? false
   : S extends `${infer First}${infer Rest}`
-    ? Uppercase<First> extends _AuthLetter
-      ? First extends Lowercase<First>
-        ? _IsCamelCase<Rest>
-        : false
+  ? Uppercase<First> extends _AuthLetter
+    ? First extends Lowercase<First>
+      ? _IsCamelCase<Rest>
       : false
-    : never;
+    : false
+  : never;
 
 type _IsCamelCase<S extends string> = S extends `${infer First}${infer Rest}`
   ? Uppercase<First> extends _AuthLetter | _AuthNumber
@@ -46,6 +46,6 @@ type _IsCamelCase<S extends string> = S extends `${infer First}${infer Rest}`
     : false
   : never;
 
-type DeepPartial<T> = {
+export type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
 };

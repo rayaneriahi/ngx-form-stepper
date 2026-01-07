@@ -1,3 +1,4 @@
+import { IsCamelCase } from '../common/common.types';
 import { ValidatorTuple } from '../validator/validator.types';
 import {
   HasDuplicateValidators,
@@ -10,7 +11,7 @@ export class Input<
   T extends InputType,
   D extends InputDefaultValue<T>,
   K extends string,
-  V extends ValidatorTuple<ValidatorsNamesOfType<T>>,
+  V extends ValidatorTuple<ValidatorsNamesOfType<T>>
 > {
   readonly defaultValue: D;
 
@@ -19,7 +20,7 @@ export class Input<
     defaultValue: D,
     readonly returnKey: IsCamelCase<K> extends true ? K : never,
     readonly label: string,
-    readonly validators?: HasDuplicateValidators<V> extends true ? never : V,
+    readonly validators?: HasDuplicateValidators<V> extends true ? never : V
   ) {
     this.defaultValue = (
       type === InputType.Checkbox ? (defaultValue === null ? false : defaultValue) : defaultValue

@@ -1,115 +1,96 @@
-@let _key = key();
-@let _confirmKey = confirmKey();
-@let _classNames = classNames();
-@let _input = input();
-@let _confirmValidator = confirmValidator();
-@let _othersValidators = othersValidators();
-@let _control = control();
-@let _confirmControl = confirmControl();
-@let _form = form();
-@let _inputContainerCn = inputContainerCn();
-@let _isRequired = isRequired();
-@let _selectItems = selectItems();
+@let _key = key(); @let _confirmKey = confirmKey(); @let _classNames = classNames(); @let _input =
+input(); @let _confirmValidator = confirmValidator(); @let _othersValidators = othersValidators();
+@let _control = control(); @let _confirmControl = confirmControl(); @let _form = form(); @let
+_inputContainerCn = inputContainerCn(); @let _isRequired = isRequired(); @let _selectItems =
+selectItems(); @if (_input !== null && _confirmValidator === null) {
+<div [ngClass]="_classNames?.container ?? ''">
+  <label [for]="_key" [ngClass]="_classNames?.label ?? ''"
+    >{{ _input.label }}
+    @if (_isRequired) {
+    <span [ngClass]="_classNames?.required ?? ''">*</span>
+    }
+  </label>
 
-@if (_input !== null && _confirmValidator === null) {
-  <div [ngClass]="_classNames?.container">
-    <label [for]="_key" [ngClass]="_classNames?.label"
+  @if (_input.type === 'select') {
+  <select [id]="_key" [formControlName]="_key" [ngClass]="_classNames?.input ?? ''">
+    @for (item of _selectItems; track item) {
+    <option [value]="item.value">
+      {{ item.label }}
+    </option>
+    }
+  </select>
+  } @else {
+  <input
+    #input
+    [id]="_key"
+    [type]="_input.type"
+    (click)="handleClick()"
+    [formControlName]="_key"
+    [ngClass]="_classNames?.input ?? ''"
+  />
+  } @if (_othersValidators !== null && _control !== null) {
+  <div [ngClass]="_classNames?.errorContainer ?? ''">
+    @for (v of _othersValidators; track v) { @if (_control.hasError(v.name({ key: _key })) &&
+    _control.touched) {
+    <p [ngClass]="_classNames?.error ?? ''">
+      {{ v.errorText }}
+    </p>
+    } }
+  </div>
+  }
+</div>
+} @if (_input !== null && _confirmValidator !== null && _input.type !== 'select') {
+<div [ngClass]="_inputContainerCn ?? ''">
+  <div [ngClass]="_classNames?.container ?? ''">
+    <label [for]="_key" [ngClass]="_classNames?.label ?? ''"
       >{{ _input.label }}
       @if (_isRequired) {
-        <span [ngClass]="_classNames?.required">*</span>
+      <span [ngClass]="_classNames?.required ?? ''">*</span>
       }
     </label>
 
-    @if (_input.type === 'select') {
-      <select [id]="_key" [formControlName]="_key" [ngClass]="_classNames?.input">
-        @for (item of _selectItems; track item) {
-          <option [value]="item.value">
-            {{ item.label }}
-          </option>
-        }
-      </select>
-    } @else {
-      <input
-        #input
-        [id]="_key"
-        [type]="_input.type"
-        (click)="handleClick()"
-        [formControlName]="_key"
-        [ngClass]="_classNames?.input"
-      />
-    }
+    <input
+      [id]="_key"
+      [type]="_input.type"
+      [formControlName]="_key"
+      [ngClass]="_classNames?.input ?? ''"
+    />
 
     @if (_othersValidators !== null && _control !== null) {
-      <div [ngClass]="_classNames?.errorContainer">
-        @for (v of _othersValidators; track v) {
-          @if (_control.hasError(v.name({ key: _key })) && _control.touched) {
-            <p [ngClass]="_classNames?.error">
-              {{ v.errorText }}
-            </p>
-          }
-        }
-      </div>
+    <div [ngClass]="_classNames?.errorContainer ?? ''">
+      @for (v of _othersValidators; track v) { @if (_control.hasError(v.name({ key: _key })) &&
+      _control.touched) {
+      <p [ngClass]="_classNames?.error ?? ''">
+        {{ v.errorText }}
+      </p>
+      } }
+    </div>
     }
   </div>
-}
 
-@if (_input !== null && _confirmValidator !== null && _input.type !== 'select') {
-  <div [ngClass]="_inputContainerCn">
-    <div [ngClass]="_classNames?.container">
-      <label [for]="_key" [ngClass]="_classNames?.label"
-        >{{ _input.label }}
-        @if (_isRequired) {
-          <span [ngClass]="_classNames?.required">*</span>
-        }
-      </label>
-
-      <input
-        [id]="_key"
-        [type]="_input.type"
-        [formControlName]="_key"
-        [ngClass]="_classNames?.input"
-      />
-
-      @if (_othersValidators !== null && _control !== null) {
-        <div [ngClass]="_classNames?.errorContainer">
-          @for (v of _othersValidators; track v) {
-            @if (_control.hasError(v.name({ key: _key })) && _control.touched) {
-              <p [ngClass]="_classNames?.error">
-                {{ v.errorText }}
-              </p>
-            }
-          }
-        </div>
+  <div [ngClass]="_classNames?.container ?? ''">
+    <label [for]="_confirmKey" [ngClass]="_classNames?.label ?? ''"
+      >{{ _confirmValidator.confirmLabel }}
+      @if (_isRequired) {
+      <span [ngClass]="_classNames?.required ?? ''">*</span>
       }
+    </label>
+
+    <input
+      [id]="_confirmKey"
+      [type]="_input.type"
+      [formControlName]="_confirmKey"
+      [ngClass]="_classNames?.input ?? ''"
+    />
+
+    @if ( _form !== null && _confirmControl !== null && _form.hasError(_confirmValidator.name({ key:
+    _key })) && _confirmControl.touched ) {
+    <div [ngClass]="_classNames?.errorContainer ?? ''">
+      <p [ngClass]="_classNames?.error ?? ''">
+        {{ _confirmValidator.errorText }}
+      </p>
     </div>
-
-    <div [ngClass]="_classNames?.container">
-      <label [for]="_confirmKey" [ngClass]="_classNames?.label"
-        >{{ _confirmValidator.confirmLabel }}
-        @if (_isRequired) {
-          <span [ngClass]="_classNames?.required">*</span>
-        }
-      </label>
-
-      <input
-        [id]="_confirmKey"
-        [type]="_input.type"
-        [formControlName]="_confirmKey"
-        [ngClass]="_classNames?.input"
-      />
-
-      @if (
-        _form !== null &&
-        _confirmControl !== null &&
-        _form.hasError(_confirmValidator.name({ key: _key })) &&
-        _confirmControl.touched
-      ) {
-        <div [ngClass]="_classNames?.errorContainer">
-          <p [ngClass]="_classNames?.error">
-            {{ _confirmValidator.errorText }}
-          </p>
-        </div>
-      }
-    </div>
+    }
   </div>
+</div>
 }

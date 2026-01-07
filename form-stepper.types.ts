@@ -1,4 +1,5 @@
 import { MultiStepButtonText, SingleStepButtonText } from './button/button.types';
+import { DeepPartial } from './common/common.types';
 import {
   InputDefaultValue,
   InputTuple,
@@ -117,7 +118,7 @@ type _FSReturnKeys<T extends StepTuple> = T extends [infer First, ...infer Rest]
 
 type _HasDuplicateReturnKeys<T extends InputTuple, RestSteps extends StepTuple> = T extends [
   infer First,
-  ...infer Rest,
+  ...infer Rest
 ]
   ? First extends Input<
       InputType,
@@ -130,8 +131,8 @@ type _HasDuplicateReturnKeys<T extends InputTuple, RestSteps extends StepTuple> 
         ? true
         : _HasDuplicateReturnKeys<Rest, RestSteps>
       : Key extends _FSReturnKeys<RestSteps>
-        ? true
-        : HasDuplicateReturnKeys<RestSteps>
+      ? true
+      : HasDuplicateReturnKeys<RestSteps>
     : never
   : never;
 
