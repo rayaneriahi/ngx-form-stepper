@@ -158,7 +158,7 @@ export type ValidatorsNames =
 
 ## Reusing typed validators
 
-`ngx-form-stepper` allows you to factor them while keeping strict typing based on the `Input` type.
+**ngx-form-stepper** allows you to factor them while keeping strict typing based on the `Input` type.
 
 ```typescript
 const reqVal: Validator<'required'> = required('Le champ est requis');
