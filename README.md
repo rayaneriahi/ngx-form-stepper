@@ -158,16 +158,16 @@ export type ValidatorsNames =
 
 ## Validator compatibility table
 
-| Input Type | required | minLength | maxLength | email | strongPassword | confirm | check |
-| ---------- | :------: | :-------: | :-------: | :---: | :------------: | :-----: | :---: |
-| Text       |    ✅    |    ✅     |    ✅     |  ❌   |       ❌       |   ✅    |  ❌   |
-| Password   |    ✅    |    ✅     |    ✅     |  ❌   |       ✅       |   ✅    |  ❌   |
-| Email      |    ✅    |    ❌     |    ❌     |  ✅   |       ❌       |   ❌    |  ❌   |
-| Number     |    ✅    |    ❌     |    ❌     |  ❌   |       ❌       |   ❌    |  ❌   |
-| Tel        |    ✅    |    ❌     |    ❌     |  ❌   |       ❌       |   ❌    |  ❌   |
-| Checkbox   |    ✅    |    ❌     |    ❌     |  ❌   |       ❌       |   ❌    |  ✅   |
-| Date       |    ✅    |    ❌     |    ❌     |  ❌   |       ❌       |   ❌    |  ❌   |
-| Select     |    ✅    |    ❌     |    ❌     |  ❌   |       ❌       |   ❌    |  ❌   |
+| Input Type | required | minLength | maxLength | email | strongPassword | confirm | check | pattern |
+| ---------- | :------: | :-------: | :-------: | :---: | :------------: | :-----: | :---: | :-----: |
+| Text       |    ✅    |    ✅     |    ✅     |  ❌   |       ❌       |   ✅    |  ❌   |   ✅    |
+| Password   |    ✅    |    ✅     |    ✅     |  ❌   |       ✅       |   ✅    |  ❌   |   ✅    |
+| Email      |    ✅    |    ❌     |    ❌     |  ✅   |       ❌       |   ❌    |  ❌   |   ❌    |
+| Number     |    ✅    |    ❌     |    ❌     |  ❌   |       ❌       |   ❌    |  ❌   |   ❌    |
+| Tel        |    ✅    |    ❌     |    ❌     |  ❌   |       ❌       |   ❌    |  ❌   |   ❌    |
+| Checkbox   |    ✅    |    ❌     |    ❌     |  ❌   |       ❌       |   ❌    |  ✅   |   ❌    |
+| Date       |    ✅    |    ❌     |    ❌     |  ❌   |       ❌       |   ❌    |  ❌   |   ❌    |
+| Select     |    ✅    |    ❌     |    ❌     |  ❌   |       ❌       |   ❌    |  ❌   |   ❌    |
 
 ## Reusing typed validators
 
