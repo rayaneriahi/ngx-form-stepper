@@ -99,24 +99,20 @@ export class Input<
     readonly validators?: HasDuplicateValidators<V> extends true ? never : V
   ) {
     this.defaultValue = (
-      type === InputType.Checkbox
-        ? defaultValue === null
-          ? false
-          : defaultValue
-        : defaultValue
+      type === InputType.Checkbox ? (defaultValue === null ? false : defaultValue) : defaultValue
     ) as D;
   }
 }
 
 export enum InputType {
-  Text = "text",
-  Password = "password",
-  Email = "email",
-  Number = "number",
-  Tel = "tel",
-  Checkbox = "checkbox",
-  Date = "date",
-  Select = "select",
+  Text = 'text',
+  Password = 'password',
+  Email = 'email',
+  Number = 'number',
+  Tel = 'tel',
+  Checkbox = 'checkbox',
+  Date = 'date',
+  Select = 'select',
 }
 ```
 
@@ -125,23 +121,18 @@ export enum InputType {
 A `validator` is a function that can be passed to an `Input`. It takes different arguments like conditional values or error text.
 
 ```typescript
-export function minLength(
-  min: number,
-  errorText: string
-): Validator<"minLength"> {
-  const name: StandardValidatorNameFn<"minLength"> = (params: {
-    key: string;
-  }) => `${params.key}-minLength`;
+export function minLength(min: number, errorText: string): Validator<'minLength'> {
+  const name: StandardValidatorNameFn<'minLength'> = (params: { key: string }) =>
+    `${params.key}-minLength`;
 
-  const fn =
-    (params: { key: string }) => (control: AbstractControl<string>) => {
-      const customName: StandardValidatorName<"minLength"> = `${params.key}-minLength`;
+  const fn = (params: { key: string }) => (control: AbstractControl<string>) => {
+    const customName: StandardValidatorName<'minLength'> = `${params.key}-minLength`;
 
-      return control.value.length < min ? { [customName]: true } : null;
-    };
+    return control.value.length < min ? { [customName]: true } : null;
+  };
 
   return {
-    kind: "minLength",
+    kind: 'minLength',
     name,
     fn,
     errorText,
@@ -149,21 +140,49 @@ export function minLength(
 }
 
 export type ValidatorsNames =
-  | "required"
-  | "check"
-  | "confirm"
-  | "minLength"
-  | "maxLength"
-  | "min"
-  | "max"
-  | "integer"
-  | "pattern"
-  | "strongPassword"
-  | "email"
-  | "phone"
-  | "minDate"
-  | "maxDate";
+  | 'required'
+  | 'check'
+  | 'confirm'
+  | 'minLength'
+  | 'maxLength'
+  | 'min'
+  | 'max'
+  | 'integer'
+  | 'pattern'
+  | 'strongPassword'
+  | 'email'
+  | 'phone'
+  | 'minDate'
+  | 'maxDate';
 ```
+
+## Reusing typed validators
+
+`ngx-form-stepper` allows you to factor them while keeping strict typing based on the `Input` type.
+
+```typescript
+const reqVal: Validator<'required'> = required('Le champ est requis');
+```
+
+Then you can create groups of validators compatible only with a given `Input` type :
+
+```typescript
+const emailValidators: ValidatorTuple<ValidatorsNamesOfType<InputType.Email>> = [
+  reqVal,
+  email("L'email n'est pas valide"),
+];
+```
+
+What is impossible (and intentional)
+
+```typescript
+// ❌ Erreur de compilation
+const badValidators: ValidatorTuple<ValidatorsNamesOfType<InputType.Number>> = [
+  email('Invalid email'),
+];
+```
+
+This error is detected at compile time, even before running the application.
 
 ## Select
 
@@ -176,22 +195,19 @@ select = new Input(
   InputType.Select,
   new Select(
     [
-      { label: "Male", value: "male" },
-      { label: "Female", value: "female" },
+      { label: 'Male', value: 'male' },
+      { label: 'Female', value: 'female' },
     ],
     0
   ),
-  "gender",
-  "Gender"
+  'gender',
+  'Gender'
 );
 
 export class Select<T extends SelectItemTuple, I extends number | null> {
   current: SelectItem | null;
 
-  constructor(
-    readonly items: T,
-    readonly currentIndex: HasIndex<T, I> extends true ? I : never
-  ) {
+  constructor(readonly items: T, readonly currentIndex: HasIndex<T, I> extends true ? I : never) {
     this.current = currentIndex === null ? null : this.items[currentIndex];
   }
 }
@@ -221,6 +237,16 @@ export type StepConfig = Readonly<{
 }>;
 ```
 
+Duplication of `returnKey` is forbidden (and intentional)
+
+```typescript
+// ❌ Erreur de compilation
+new Step([
+  new Input(InputType.Text, null, 'name', 'First name'),
+  new Input(InputType.Text, null, 'name', 'Last name'),
+]);
+```
+
 ## FormStepper
 
 Impossible to duplicate an `Input` return key between two `Steps`.
@@ -235,14 +261,10 @@ export class FormStepper<T extends StepTuple> {
 
   constructor(
     readonly steps: HasDuplicateReturnKeys<T> extends true ? never : T,
-    readonly config: T extends MultiStepTuple
-      ? MultiStepConfig
-      : SingleStepConfig
+    readonly config: T extends MultiStepTuple ? MultiStepConfig : SingleStepConfig
   ) {
     this.values = Object.fromEntries(
-      steps.flatMap((step) =>
-        step.inputs.map((input) => [input.returnKey, input.defaultValue])
-      )
+      steps.flatMap((step) => step.inputs.map((input) => [input.returnKey, input.defaultValue]))
     ) as FormStepperValues<T>;
   }
 }
@@ -269,10 +291,7 @@ export type MultiStepConfig = Readonly<{
 A `RedirectItem[]` is an array of strings or `RedirectUrl` objects, a kind of mini TS language to create texts with clickable links.
 
 ```typescript
-actionText = [
-  "You already have an account ?",
-  { url: "/signin", urlText: "Sign in" },
-];
+actionText = ['You already have an account ?', { url: '/signin', urlText: 'Sign in' }];
 
 export type RedirectUrl = Readonly<{ url: string; urlText: string }>;
 
@@ -301,14 +320,14 @@ To add your own styles to a `FormStepper`, I recommend creating a separate style
 
 ```typescript
 classNames: SingleStepClassNames = {
-  title: "fs-title",
+  title: 'fs-title',
   input: {
-    error: "fs-input-error",
+    error: 'fs-input-error',
   },
 };
 
 form = new FormStepper([this.step], {
-  buttonText: "Submit",
+  buttonText: 'Submit',
   classNames: this.classNames,
 });
 ```
@@ -328,7 +347,7 @@ form = new FormStepper([this.step], {
 ```css
 /* styles.css */
 
-@import "app/fs.css";
+@import 'app/fs.css';
 ```
 
 `classNames` property of `FormStepper` also depends on the number of `Steps`.
@@ -406,3 +425,10 @@ export type MultiStepClassNames = DeepPartial<{
   };
 }>;
 ```
+
+## In summary
+
+- Common errors are impossible
+- Types guide the implementation
+- The final form is always consistent
+- The compiler becomes an ally
