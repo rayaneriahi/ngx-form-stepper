@@ -60,26 +60,6 @@ onComplete() {
 
 ## Input
 
-Chaque type d’`Input` accepte uniquement les `validators` compatibles.
-
-Exemples :
-
-- `email` ❌ interdit sur `number`
-- `minLength` ❌ interdit sur `checkbox`
-- `confirm` ❌ interdit sur `select`
-
-Et uniquement les valeurs par défaut compatibles.
-
-Exemples :
-
-- `string` ❌ interdit sur `number`
-- `number` ❌ interdit sur `checkbox`
-- `string | number` ❌ interdit sur `select`
-
-Clé de retour au format camelCase.
-
-Impossible de dupliquer un `validator`.
-
 ```typescript
 export class Input<
   T extends InputType,
@@ -112,6 +92,28 @@ export enum InputType {
   Date = 'date',
   Select = 'select',
 }
+```
+
+Chaque type d’`Input` accepte uniquement les valeurs par défaut compatibles.
+
+```typescript
+export type InputDefaultValue<T extends InputType> = T extends InputType.Text
+  ? string | null
+  : T extends InputType.Password
+  ? string | null
+  : T extends InputType.Email
+  ? string | null
+  : T extends InputType.Number
+  ? number | null
+  : T extends InputType.Tel
+  ? string | null
+  : T extends InputType.Checkbox
+  ? boolean | null
+  : T extends InputType.Date
+  ? Date | null
+  : T extends InputType.Select
+  ? Select<SelectItemTuple, number | null>
+  : never;
 ```
 
 ## Validator
@@ -152,6 +154,28 @@ export type ValidatorsNames =
   | 'phone'
   | 'minDate'
   | 'maxDate';
+```
+
+Chaque type d’`Input` accepte uniquement les `validators` compatibles.
+
+```typescript
+export type ValidatorsNamesOfType<T extends InputType> = T extends InputType.Text
+  ? 'required' | 'confirm' | 'minLength' | 'maxLength' | 'pattern'
+  : T extends InputType.Password
+  ? 'required' | 'confirm' | 'strongPassword' | 'pattern'
+  : T extends InputType.Email
+  ? 'required' | 'confirm' | 'email'
+  : T extends InputType.Number
+  ? 'required' | 'confirm' | 'min' | 'max' | 'integer'
+  : T extends InputType.Tel
+  ? 'required' | 'confirm' | 'phone'
+  : T extends InputType.Checkbox
+  ? 'check'
+  : T extends InputType.Date
+  ? 'required' | 'confirm' | 'minDate' | 'maxDate'
+  : T extends InputType.Select
+  ? 'required'
+  : never;
 ```
 
 ## Réutilisation de validators typés
@@ -214,6 +238,24 @@ export type SelectItem = {
   label: string;
   value: string;
 };
+```
+
+Impossible d'assigner un `currentIndex` invalide.
+
+```typescript
+// ❌ Erreur de compilation
+invalid = new Input(
+  InputType.Select,
+  new Select(
+    [
+      { label: 'Male', value: 'male' },
+      { label: 'Female', value: 'female' },
+    ],
+    5
+  ),
+  'gender',
+  'Gender'
+);
 ```
 
 ## Step
