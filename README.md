@@ -176,7 +176,7 @@ const emailValidators: ValidatorTuple<ValidatorsNamesOfType<InputType.Email>> = 
 What is impossible (and intentional)
 
 ```typescript
-// ❌ Erreur de compilation
+// ❌ Compilation error
 const badValidators: ValidatorTuple<ValidatorsNamesOfType<InputType.Number>> = [
   email('Invalid email'),
 ];
@@ -240,7 +240,7 @@ export type StepConfig = Readonly<{
 Duplication of `returnKey` is forbidden (and intentional)
 
 ```typescript
-// ❌ Erreur de compilation
+// ❌ Compilation error
 new Step([
   new Input(InputType.Text, null, 'name', 'First name'),
   new Input(InputType.Text, null, 'name', 'Last name'),
