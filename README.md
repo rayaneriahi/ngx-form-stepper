@@ -154,20 +154,25 @@ export type ValidatorsNames =
   | 'phone'
   | 'minDate'
   | 'maxDate';
+
+export type ValidatorsNamesOfType<T extends InputType> = T extends InputType.Text
+  ? 'required' | 'confirm' | 'minLength' | 'maxLength' | 'pattern'
+  : T extends InputType.Password
+  ? 'required' | 'confirm' | 'strongPassword' | 'pattern'
+  : T extends InputType.Email
+  ? 'required' | 'confirm' | 'email'
+  : T extends InputType.Number
+  ? 'required' | 'confirm' | 'min' | 'max' | 'integer'
+  : T extends InputType.Tel
+  ? 'required' | 'confirm' | 'phone'
+  : T extends InputType.Checkbox
+  ? 'check'
+  : T extends InputType.Date
+  ? 'required' | 'confirm' | 'minDate' | 'maxDate'
+  : T extends InputType.Select
+  ? 'required'
+  : never;
 ```
-
-## Validator compatibility table
-
-| Input Type | required | minLength | maxLength | email | strongPassword | confirm | check | pattern | min | max | integer | phone |
-| ---------- | :------: | :-------: | :-------: | :---: | :------------: | :-----: | :---: | :-----: | :-: | :-: | :-----: | ----- |
-| Text       |    ✅    |    ✅     |    ✅     |  ❌   |       ❌       |   ✅    |  ❌   |   ✅    | ❌  | ❌  |   ❌    | ❌    |
-| Password   |    ✅    |    ❌     |    ❌     |  ❌   |       ✅       |   ✅    |  ❌   |   ✅    | ❌  | ❌  |   ❌    | ❌    |
-| Email      |    ✅    |    ❌     |    ❌     |  ✅   |       ❌       |   ✅    |  ❌   |   ❌    | ❌  | ❌  |   ❌    | ❌    |
-| Number     |    ✅    |    ❌     |    ❌     |  ❌   |       ❌       |   ✅    |  ❌   |   ❌    | ✅  | ✅  |   ✅    | ❌    |
-| Tel        |    ✅    |    ❌     |    ❌     |  ❌   |       ❌       |   ✅    |  ❌   |   ❌    | ❌  | ❌  |   ❌    | ✅    |
-| Checkbox   |    ❌    |    ❌     |    ❌     |  ❌   |       ❌       |   ❌    |  ✅   |   ❌    | ❌  | ❌  |   ❌    | ❌    |
-| Date       |    ✅    |    ❌     |    ❌     |  ❌   |       ❌       |   ❌    |  ❌   |   ❌    | ❌  | ❌  |   ❌    | ❌    |
-| Select     |    ✅    |    ❌     |    ❌     |  ❌   |       ❌       |   ❌    |  ❌   |   ❌    | ❌  | ❌  |   ❌    | ❌    |
 
 ## Reusing typed validators
 
