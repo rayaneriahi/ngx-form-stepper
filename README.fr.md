@@ -162,7 +162,7 @@ export type ValidatorsNames =
 const reqVal: Validator<'required'> = required('Le champ est requis');
 ```
 
-Puis de créer des groupes de validators compatibles uniquement avec un type d’`Input` donné :
+Puis de créer des groupes de `validators` compatibles uniquement avec un type d’`Input` donné :
 
 ```typescript
 const emailValidators: ValidatorTuple<ValidatorsNamesOfType<InputType.Email>> = [
