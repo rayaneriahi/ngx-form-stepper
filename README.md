@@ -156,6 +156,19 @@ export type ValidatorsNames =
   | 'maxDate';
 ```
 
+## Validator compatibility table
+
+| Input Type | required | minLength | maxLength | email | strongPassword | confirm | check |
+| ---------- | :------: | :-------: | :-------: | :---: | :------------: | :-----: | :---: |
+| Text       |    ✅    |    ✅     |    ✅     |  ❌   |       ❌       |   ✅    |  ❌   |
+| Password   |    ✅    |    ✅     |    ✅     |  ❌   |       ✅       |   ✅    |  ❌   |
+| Email      |    ✅    |    ❌     |    ❌     |  ✅   |       ❌       |   ❌    |  ❌   |
+| Number     |    ✅    |    ❌     |    ❌     |  ❌   |       ❌       |   ❌    |  ❌   |
+| Tel        |    ✅    |    ❌     |    ❌     |  ❌   |       ❌       |   ❌    |  ❌   |
+| Checkbox   |    ✅    |    ❌     |    ❌     |  ❌   |       ❌       |   ❌    |  ✅   |
+| Date       |    ✅    |    ❌     |    ❌     |  ❌   |       ❌       |   ❌    |  ❌   |
+| Select     |    ✅    |    ❌     |    ❌     |  ❌   |       ❌       |   ❌    |  ❌   |
+
 ## Reusing typed validators
 
 **ngx-form-stepper** allows you to factor them while keeping strict typing based on the `Input` type.
