@@ -331,7 +331,7 @@ export type MultiStepConfig = Readonly<{
 Un `RedirectItem[]` est un tableau de string ou d’objet `RedirectUrl`, une sorte de mini langage TS permettant de créer des textes avec lien cliquable.
 
 ```typescript
-actionText = ['You already have an account ?', { url: '/signin', urlText: 'Sign in' }];
+actionText = ['Vous avez déjà un compte ?', { url: '/signin', urlText: 'se connecter' }];
 
 export type RedirectUrl = Readonly<{ url: string; urlText: string }>;
 
