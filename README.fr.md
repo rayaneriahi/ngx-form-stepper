@@ -285,8 +285,6 @@ new Step([
 
 Impossible de dupliquer la clé de retour d’un `Input` entre deux `Steps`.
 
-Objet de configuration qui dépend du nombre de `Steps`.
-
 Tuple d’une ou plusieurs `Steps`.
 
 ```typescript
