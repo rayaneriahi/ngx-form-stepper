@@ -1,6 +1,6 @@
 # ngx-form-stepper
 
-**ngx-form-stepper** est une librairie Angular pour créer des formulaires à étapes avec validations par champ, **extrêmement typée**.
+**ngx-form-stepper** est une librairie Angular qui permet de créer des formulaires à étapes avec validations par champ, **extrêmement typée**.
 
 Elle empêche la création d’états invalides **au moment du développement**, pas à l’exécution.
 
@@ -29,24 +29,24 @@ N’hésitez pas à ouvrir une issue ou une discussion. Tout retour aide à amé
 
 ```typescript
 step1 = new Step([
-  new Input(InputType.Text, null, 'firstName', 'First name', [required('First name is required')]),
-  new Input(InputType.Text, null, 'lastName', 'Last name', [required('Last name is required')]),
+  new Input(InputType.Text, null, 'firstName', 'Prénom', [required('Le prénom est requis')]),
+  new Input(InputType.Text, null, 'lastName', 'Nom', [required('Le nom est requis')]),
 ]);
 
 step2 = new Step([
   new Input(InputType.Email, null, 'email', 'E-mail', [
-    required('E-mail is required'),
-    email('E-mail is invalid'),
+    required("L'email est requise"),
+    email("L'email est invalid"),
   ]),
-  new Input(InputType.Password, null, 'password', 'Password', [
-    required('Password is required'),
-    strongPassword('Password is too weak'),
+  new Input(InputType.Password, null, 'password', 'Mot de passe', [
+    required('Le mot de passe est requis'),
+    strongPassword('Le mot de passe est trop faible'),
   ]),
 ]);
 
 signupForm = new FormStepper([step1, step2], {
-  title: 'Sign in',
-  buttonText: { next: 'Next', previous: 'Previous', final: 'Sign up' },
+  title: "S'inscrire",
+  buttonText: { next: 'Continuer', previous: 'Retour', final: "S'inscrire" },
 });
 
 onComplete() {
@@ -180,16 +180,12 @@ export type ValidatorsNamesOfType<T extends InputType> = T extends InputType.Tex
 
 ## Réutilisation de validators typés
 
-**ngx-form-stepper** permet de les factoriser tout en conservant un typage strict basé sur le type d’`Input`.
+**ngx-form-stepper** permet de les factoriser, puis de créer des groupes de `validators` compatibles uniquement avec un type d’`Input` donné :
 
 ```typescript
-const reqVal: Validator<'required'> = required('Le champ est requis');
-```
+reqVal: Validator<'required'> = required('Le champ est requis');
 
-Puis de créer des groupes de `validators` compatibles uniquement avec un type d’`Input` donné :
-
-```typescript
-const emailValidators: ValidatorTuple<ValidatorsNamesOfType<InputType.Email>> = [
+emailValidators: ValidatorTuple<ValidatorsNamesOfType<InputType.Email>> = [
   reqVal,
   email("L'email n'est pas valide"),
 ];
@@ -200,7 +196,7 @@ Ce qui est impossible (et volontaire)
 ```typescript
 // ❌ Erreur de compilation
 const badValidators: ValidatorTuple<ValidatorsNamesOfType<InputType.Number>> = [
-  email('Invalid email'),
+  email("L'email n'est pas valide"),
 ];
 ```
 
@@ -217,13 +213,13 @@ select = new Input(
   InputType.Select,
   new Select(
     [
-      { label: 'Male', value: 'male' },
-      { label: 'Female', value: 'female' },
+      { label: 'Homme', value: 'male' },
+      { label: 'Femme', value: 'female' },
     ],
     0
   ),
   'gender',
-  'Gender'
+  'Genre'
 );
 
 export class Select<T extends SelectItemTuple, I extends number | null> {
@@ -248,19 +244,17 @@ invalid = new Input(
   InputType.Select,
   new Select(
     [
-      { label: 'Male', value: 'male' },
-      { label: 'Female', value: 'female' },
+      { label: 'Homme', value: 'male' },
+      { label: 'Femme', value: 'female' },
     ],
     5
   ),
   'gender',
-  'Gender'
+  'Genre'
 );
 ```
 
 ## Step
-
-Impossible de dupliquer la clé de retour d’un `Input`.
 
 Tuple d’un ou plusieurs `Inputs`.
 
@@ -308,7 +302,11 @@ export class FormStepper<T extends StepTuple> {
     ) as FormStepperValues<T>;
   }
 }
+```
 
+Objet de configuration qui dépend du nombre de `Steps`.
+
+```typescript
 export type SingleStepConfig = Readonly<{
   title?: string;
   actionText?: RedirectItem[];
@@ -331,7 +329,7 @@ export type MultiStepConfig = Readonly<{
 Un `RedirectItem[]` est un tableau de string ou d’objet `RedirectUrl`, une sorte de mini langage TS permettant de créer des textes avec lien cliquable.
 
 ```typescript
-actionText = ['Vous avez déjà un compte ?', { url: '/signin', urlText: 'se connecter' }];
+actionText = ['Vous avez déjà un compte ?', { url: '/signin', urlText: 'Se connecter' }];
 
 export type RedirectUrl = Readonly<{ url: string; urlText: string }>;
 
@@ -390,7 +388,7 @@ form = new FormStepper([this.step], {
 @import 'app/fs.css';
 ```
 
-La propriété `classNames` du `FormStepper` dépend du nombre de `Steps`.
+La propriété `classNames` du `FormStepper` dépend également du nombre de `Steps`.
 
 ```typescript
 export type SingleStepClassNames = DeepPartial<{
