@@ -2,7 +2,7 @@
 
 [🇫🇷 Lire la version française](README.fr.md)
 
-**ngx-form-stepper** is an Angular library to create multi-step forms with field-level validations, **extremely typed**.
+**ngx-form-stepper** is an Angular library that allows you to create multi-step forms with field-level validation, **extremely strongly typed**.
 
 It prevents creating invalid states **at development time**, not at runtime.
 
@@ -62,26 +62,6 @@ onComplete() {
 
 ## Input
 
-Each `Input` type only accepts compatible `validators`.
-
-Examples :
-
-- `email` ❌ forbidden on `number`
-- `minLength` ❌ forbidden on `checkbox`
-- `confirm` ❌ forbidden on `select`
-
-And only default values that are compatible.
-
-Examples :
-
-- `string` ❌ forbidden on `number`
-- `number` ❌ forbidden on `checkbox`
-- `string | number` ❌ forbidden on `select`
-
-Return key must be camelCase.
-
-Duplicating a `validator` is impossible.
-
 ```typescript
 export class Input<
   T extends InputType,
@@ -114,6 +94,28 @@ export enum InputType {
   Date = 'date',
   Select = 'select',
 }
+```
+
+Each `Input` type only accepts compatible default values.
+
+```typescript
+export type InputDefaultValue<T extends InputType> = T extends InputType.Text
+  ? string | null
+  : T extends InputType.Password
+  ? string | null
+  : T extends InputType.Email
+  ? string | null
+  : T extends InputType.Number
+  ? number | null
+  : T extends InputType.Tel
+  ? string | null
+  : T extends InputType.Checkbox
+  ? boolean | null
+  : T extends InputType.Date
+  ? Date | null
+  : T extends InputType.Select
+  ? Select<SelectItemTuple, number | null>
+  : never;
 ```
 
 ## Validator
@@ -154,7 +156,11 @@ export type ValidatorsNames =
   | 'phone'
   | 'minDate'
   | 'maxDate';
+```
 
+Each `Input` type only accepts compatible validators.
+
+```typescript
 export type ValidatorsNamesOfType<T extends InputType> = T extends InputType.Text
   ? 'required' | 'confirm' | 'minLength' | 'maxLength' | 'pattern'
   : T extends InputType.Password
@@ -176,18 +182,14 @@ export type ValidatorsNamesOfType<T extends InputType> = T extends InputType.Tex
 
 ## Reusing typed validators
 
-**ngx-form-stepper** allows you to factor them while keeping strict typing based on the `Input` type.
+**ngx-form-stepper** allows you to factor them out, then create groups of `validators` that are compatible only with a given `Input` type:
 
 ```typescript
-const reqVal: Validator<'required'> = required('Le champ est requis');
-```
+reqVal: Validator<'required'> = required('Field is required');
 
-Then you can create groups of `validators` compatible only with a given `Input` type :
-
-```typescript
-const emailValidators: ValidatorTuple<ValidatorsNamesOfType<InputType.Email>> = [
+emailValidators: ValidatorTuple<ValidatorsNamesOfType<InputType.Email>> = [
   reqVal,
-  email("L'email n'est pas valide"),
+  email('E-mail is not valid'),
 ];
 ```
 
@@ -236,9 +238,25 @@ export type SelectItem = {
 };
 ```
 
-## Step
+Assigning an invalid currentIndex is impossible.
 
-Impossible to duplicate an `Input` return key.
+```typescript
+// ❌ Compilation error
+invalid = new Input(
+  InputType.Select,
+  new Select(
+    [
+      { label: 'Male', value: 'male' },
+      { label: 'Female', value: 'female' },
+    ],
+    5
+  ),
+  'gender',
+  'Gender'
+);
+```
+
+## Step
 
 Tuple of one or more `Inputs`.
 
@@ -269,8 +287,6 @@ new Step([
 
 Impossible to duplicate an `Input` return key between two `Steps`.
 
-Configuration object depending on the number of `Steps`.
-
 Tuple of one or more `Steps`.
 
 ```typescript
@@ -286,7 +302,11 @@ export class FormStepper<T extends StepTuple> {
     ) as FormStepperValues<T>;
   }
 }
+```
 
+Configuration object depending on the number of `Steps`.
+
+```typescript
 export type SingleStepConfig = Readonly<{
   title?: string;
   actionText?: RedirectItem[];
@@ -309,7 +329,7 @@ export type MultiStepConfig = Readonly<{
 A `RedirectItem[]` is an array of strings or `RedirectUrl` objects, a kind of mini TS language to create texts with clickable links.
 
 ```typescript
-actionText = ['You already have an account ?', { url: '/signin', urlText: 'Sign in' }];
+actionText = ['You already have an account?', { url: '/signin', urlText: 'Sign in' }];
 
 export type RedirectUrl = Readonly<{ url: string; urlText: string }>;
 
